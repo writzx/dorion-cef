@@ -141,6 +141,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         '("--no-sandbox".into(), None),
       ("--disable-dev-shm-usage".into(), None),'
 
+    # rewrites H264 to VP8 in the offer, for CEF builds without H.264;
+    # with it, H.264 streams never arrive
+    substituteInPlace src-tauri/injection/preinject.ts \
+      --replace-fail 'sdpCodecRewrite()' ""
+
     # CEF_PATH has no archive.json
     substituteInPlace "$cargoDepsCopy"/*/cef-dll-sys-*/build.rs \
       --replace-fail 'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' ""

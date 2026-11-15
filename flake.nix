@@ -1,6 +1,11 @@
 {
   description = "Dorion built against OBS's CEF (H.264)";
 
+  nixConfig = {
+    extra-substituters = [ "https://dorion-cef.cachix.org" ];
+    extra-trusted-public-keys = [ "dorion-cef.cachix.org-1:EEPuBHLUnx3eYaBFnrXtYaEUiol96P5/8ftTgSksd80=" ];
+  };
+
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs =

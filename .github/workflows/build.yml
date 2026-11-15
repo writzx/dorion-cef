@@ -1,0 +1,18 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v17
+        with:
+          name: dorion-cef
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix build .#dorion -L

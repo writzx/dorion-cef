@@ -2,9 +2,15 @@
   lib,
   cef-binary,
   fetchurl,
+  libGL,
   libpulseaudio,
   libva,
+  libx11,
+  libxcb,
+  libxext,
+  pciutils,
   pipewire,
+  vulkan-loader,
 }:
 
 # Laid out as cef-dll-sys expects at CEF_PATH: Release/ and Resources/
@@ -23,12 +29,13 @@ cef-binary.overrideAttrs (oldAttrs: {
     find "$out" -mindepth 1 -delete
     mv Release/* Resources/* include "$out"/
     find "$out/locales" -type f ! -name en-US.pak -delete
+    ln -sf "${lib.getLib vulkan-loader}/lib/libvulkan.so.1" "$out/libvulkan.so.1"
   '';
 
   stripDebugList = [ "." ];
 
-  # dlopen'd by libcef.so
   postFixup = ''
+    # dlopen'd by libcef.so
     patchelf --add-rpath "${
       lib.makeLibraryPath [
         libpulseaudio
@@ -36,6 +43,18 @@ cef-binary.overrideAttrs (oldAttrs: {
         libva
       ]
     }" "$out/libcef.so"
+
+    # ANGLE; without these the GPU process falls back to --use-gl=disabled
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        libGL
+        libx11
+        libxcb
+        libxext
+        pciutils
+        vulkan-loader
+      ]
+    }" "$out/libEGL.so" "$out/libGLESv2.so"
   '';
 
   meta = oldAttrs.meta // {

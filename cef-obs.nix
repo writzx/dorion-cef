@@ -11,12 +11,12 @@
 # flattened, with include/.
 cef-binary.overrideAttrs (oldAttrs: {
   pname = "cef-obs";
-  # OBS 33.0.1, branch 7871
-  version = "150.0.19";
+  # OBS 33.0.3, branch 7871 v2 (Chromium 150.0.7871.287)
+  version = "150.0.7871.287";
 
   src = fetchurl {
-    url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_7871_linux_x86_64.tar.xz";
-    hash = "sha256-j/xk0G6nTaYT7tp/KqXU6YZhr2+j7Yxockyabk6J6o4=";
+    url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_7871_linux_x86_64_v2.tar.xz";
+    hash = "sha256-P1x0+MTEsk276f9M/3unZKpNCnISe5aXY0LkNg5DXbM=";
   };
 
   postInstall = ''
